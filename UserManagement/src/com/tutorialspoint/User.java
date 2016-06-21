@@ -13,7 +13,7 @@ public class User implements Serializable {
    private String profession;
 
    public User(){}
-   
+
    public User(int id, String name, String profession){
       this.id = id;
       this.name = name;
@@ -23,7 +23,6 @@ public class User implements Serializable {
    public int getId() {
       return id;
    }
-
    @XmlElement
    public void setId(int id) {
       this.id = id;
@@ -32,7 +31,7 @@ public class User implements Serializable {
       return name;
    }
    @XmlElement
-   public void setName(String name) {
+      public void setName(String name) {
       this.name = name;
    }
    public String getProfession() {
@@ -41,5 +40,23 @@ public class User implements Serializable {
    @XmlElement
    public void setProfession(String profession) {
       this.profession = profession;
-   }		
+   }	
+
+   @Override
+   public boolean equals(Object object){
+      if(object == null){
+         return false;
+      }else if(!(object instanceof User)){
+         return false;
+      }else {
+         User user = (User)object;
+         if(id == user.getId()
+            && name.equals(user.getName())
+            && profession.equals(user.getProfession())
+         ){
+            return true;
+         }			
+      }
+      return false;
+   }	
 }

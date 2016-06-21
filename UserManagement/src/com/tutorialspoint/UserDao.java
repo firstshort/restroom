@@ -11,7 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDao {
-   public List<User> getAllUsers(){
+   @SuppressWarnings("unchecked")
+public List<User> getAllUsers(){
       List<User> userList = null;
       try {
          File file = new File("Users.dat");
@@ -35,6 +36,62 @@ public class UserDao {
       return userList;
    }
 
+   public User getUser(int id){
+      List<User> users = getAllUsers();
+
+      for(User user: users){
+         if(user.getId() == id){
+            return user;
+         }
+      }
+      return null;
+   }
+
+   public int addUser(User pUser){
+      List<User> userList = getAllUsers();
+      boolean userExists = false;
+      for(User user: userList){
+         if(user.getId() == pUser.getId()){
+            userExists = true;
+            break;
+         }
+      }		
+      if(!userExists){
+         userList.add(pUser);
+         saveUserList(userList);
+         return 1;
+      }
+      return 0;
+   }
+
+   public int updateUser(User pUser){
+      List<User> userList = getAllUsers();
+
+      for(User user: userList){
+         if(user.getId() == pUser.getId()){
+            int index = userList.indexOf(user);			
+            userList.set(index, pUser);
+            saveUserList(userList);
+            return 1;
+         }
+      }		
+      return 0;
+   }
+
+   public int deleteUser(int id){
+      List<User> userList = getAllUsers();
+
+      for(User user: userList){
+         if(user.getId() == id){
+            int index = userList.indexOf(user);			
+            userList.remove(index);
+            saveUserList(userList);
+            return 1;   
+         }
+      }		
+      return 0;
+   }
+
    private void saveUserList(List<User> userList){
       try {
          File file = new File("Users.dat");
@@ -42,7 +99,7 @@ public class UserDao {
 
          fos = new FileOutputStream(file);
 
-         ObjectOutputStream oos = new ObjectOutputStream(fos);
+         ObjectOutputStream oos = new ObjectOutputStream(fos);		
          oos.writeObject(userList);
          oos.close();
       } catch (FileNotFoundException e) {
@@ -50,5 +107,5 @@ public class UserDao {
       } catch (IOException e) {
          e.printStackTrace();
       }
-   }   
+   }
 }
